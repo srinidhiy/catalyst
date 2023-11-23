@@ -8,6 +8,7 @@ import { useAuth } from "@clerk/nextjs";
 import { getAuth, signInWithCustomToken } from "firebase/auth";
 import { useEffect } from "react";
 import LeftNavbar from "@/components/shared/LeftNavbar";
+import MainCard from "@/components/shared/MainCard";
  
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
@@ -32,8 +33,9 @@ export default function Home() {
   }, []);
  
   return (
-    <>
+    <div className="flex">
     <LeftNavbar />
-    </>
+    <MainCard title="Inventory" />
+    </div>
   );
 }
