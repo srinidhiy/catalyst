@@ -50,6 +50,7 @@ export function RequestItemForm() {
             name: data.name,
             vendor: data.vendor,
             stock: parseInt(data.stock),
+            status: "Pending Approval",
         });
 
         setShowForm(false);
