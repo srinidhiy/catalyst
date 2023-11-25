@@ -19,40 +19,40 @@ export default function Home() {
   const { getToken } = useAuth();
   const [items, setItems] = useState<Item[]>([]);
  
-  useEffect(() => {
-    const signInWithClerk = async () => {
-      const auth = getAuth();
-      const token = await getToken({ template: "integration_firebase" }) as string;
-      const userCredentials = await signInWithCustomToken(auth, token);
+  // useEffect(() => {
+  //   const signInWithClerk = async () => {
+  //     const auth = getAuth();
+  //     const token = await getToken({ template: "integration_firebase" }) as string;
+  //     const userCredentials = await signInWithCustomToken(auth, token);
  
-      /**
-       * The userCredentials.user object will call the methods of
-       * the Firebase platform as an authenticated user.
-       */
-      console.log("user ::", userCredentials.user);
-    };
+  //     /**
+  //      * The userCredentials.user object will call the methods of
+  //      * the Firebase platform as an authenticated user.
+  //      */
+  //     console.log("user ::", userCredentials.user);
+  //   };
 
-    const getInventory = async() => {
-        const items: Item[] = [];
-        console.log("Getting items");
-        const querySnapshot = await getDocs(collection(db, "items"));
-        querySnapshot.forEach((doc) => {
-            console.log(doc.id, " => ", doc.data());
+  //   // const getInventory = async() => {
+  //   //     const items: Item[] = [];
+  //   //     console.log("Getting items");
+  //   //     const querySnapshot = await getDocs(collection(db, "items"));
+  //   //     querySnapshot.forEach((doc) => {
+  //   //         console.log(doc.id, " => ", doc.data());
 
-            items.push(doc.data() as Item);
-        });
-        setItems(items);
-    }
-    getInventory();
+  //   //         items.push(doc.data() as Item);
+  //   //     });
+  //   //     setItems(items);
+  //   // }
+  //   // getInventory();
  
-    signInWithClerk();
+  //   signInWithClerk();
 
-  }, []);
+  // }, []);
  
   return (
     <div className="flex">
     <LeftNavbar />
-    <MainCard title="Inventory" items={items}/>
+    <MainCard />
     </div>
   );
 }
