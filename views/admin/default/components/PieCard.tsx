@@ -49,7 +49,7 @@ export default function Conversion(props: { [x: string]: any }) {
   
 		{selectedOption === 'Budget' ? (
 		  <>
-          <Text color={textColor} fontSize='md' fontWeight='600' mt='4px' mb='4px'>
+          <Text color={textColor} fontSize='md' fontWeight='600' mt='-15px' mb='4px'>
 			Budget
 		  </Text>
 			<PieChart h='100%' w='100%' chartData={pieChartData} chartOptions={pieChartOptions} />
@@ -101,7 +101,7 @@ export default function Conversion(props: { [x: string]: any }) {
 		  </>
 		) : (
 		  <>
-          <Text color={textColor} fontSize='md' fontWeight='600' mt='4px' mb='4px'>
+          <Text color={textColor} fontSize='md' fontWeight='600' mt='-15px' mb='4px'>
 			Inventory
 		  </Text>
 			<InvPieChart h='100%' w='100%' chartData={InvpieChartData} chartOptions={InvpieChartOptions} />
