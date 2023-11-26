@@ -33,7 +33,7 @@ export default function DashboardMain() {
             </div>
 
 
-            <div className="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10 " style={{ marginTop: '-20px' }}>
+            <div className="max-h-screen overflow-y-auto mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10" style={{ marginTop: '15px' }}>
             <AppWrappers>
                 <Flex>
             <Box pt={{ }}>
