@@ -54,7 +54,6 @@ export default function Home() {
     <div className="flex">
     <LeftNavbar />
     <MainCard />
-    <Sidebar />
     </div>
   );
 }
