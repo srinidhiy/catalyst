@@ -51,12 +51,12 @@ export const columns: ColumnDef<Item>[] = [
         header: ({ column }) => {
             return (
                 <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-                    <h1 className="px-3">Status</h1>
+                    <h1 className="px-3">Vendor</h1>
                     <ArrowUpDown className="h-4 w-4" />    
                 </Button>
             )
         },
-        accessorKey: "status",
+        accessorKey: "vendor",
     },
     {
         header: ({ column }) => {
@@ -73,11 +73,11 @@ export const columns: ColumnDef<Item>[] = [
         header: ({ column }) => {
             return (
                 <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-                    <h1 className="px-3">Vendor</h1>
+                    <h1 className="px-3">Status</h1>
                     <ArrowUpDown className="h-4 w-4" />    
                 </Button>
             )
         },
-        accessorKey: "vendor",
+        accessorKey: "status",
     },
 ]
