@@ -16,7 +16,6 @@ import Menu from '@/components/dashboard/menu/MainMenu';
 
 type RowObj = {
 	name: [string, boolean];
-	progress: string;
 	quantity: number;
 	date: string;
 	info: boolean;
@@ -52,23 +51,6 @@ export default function CheckTable(props: { tableData: any }) {
 				</Flex>
 			)
 		}),
-		columnHelper.accessor('progress', {
-			id: 'progress',
-			header: () => (
-				<Text
-					justifyContent='space-between'
-					align='center'
-					fontSize={{ sm: '10px', lg: '12px' }}
-					color='gray.400'>
-					PROGRESS
-				</Text>
-			),
-			cell: (info) => (
-				<Text color={textColor} fontSize='sm' fontWeight='700'>
-					{info.getValue()}
-				</Text>
-			)
-		}),
 		columnHelper.accessor('quantity', {
 			id: 'quantity',
 			header: () => (
@@ -94,7 +76,7 @@ export default function CheckTable(props: { tableData: any }) {
 					align='center'
 					fontSize={{ sm: '10px', lg: '12px' }}
 					color='gray.400'>
-					DATE
+					ORDER BY
 				</Text>
 			),
 			cell: (info) => (
@@ -117,10 +99,10 @@ export default function CheckTable(props: { tableData: any }) {
 		debugTable: true
 	});
 	return (
-		<Card flexDirection='column' w='100%' px='0px' overflowX={{ sm: 'scroll', lg: 'hidden' }}>
+		<Card flexDirection='column' w='100%' h='100%' px='0px' overflowX={{ sm: 'scroll', lg: 'hidden' }}>
 			<Flex px='25px' mb="8px" justifyContent='space-between' align='center'>
 				<Text color={textColor} fontSize='22px' fontWeight='700' lineHeight='100%'>
-					Check Table
+					Recommended Orders
 				</Text>
 				<Menu />
 			</Flex>
@@ -155,7 +137,7 @@ export default function CheckTable(props: { tableData: any }) {
 						))}
 					</Thead>
 					<Tbody>
-						{table.getRowModel().rows.slice(0, 5).map((row) => {
+						{table.getRowModel().rows.map((row) => {
 							return (
 								<Tr key={row.id}>
 									{row.getVisibleCells().map((cell) => {
