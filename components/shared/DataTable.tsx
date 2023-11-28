@@ -43,6 +43,8 @@ import { UploadForm } from "./UploadForm"
 import { Label } from "../ui/label"
 import Papa from "papaparse"
 import { Plus, Upload, PenSquare} from "lucide-react"
+import Link from "next/link"
+import ItemInfo from "./ItemInfo"
 
 
 interface DataTableProps<TData, TValue> {
@@ -195,7 +197,10 @@ export function DataTable<TData, TValue>({columns, data}: DataTableProps<TData, 
                             >
                                 {row.getVisibleCells().map((cell) => (
                                 <TableCell key={cell.id}>
-                                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                                    {cell.getContext().column.id === "name" 
+                                    ? (<ItemInfo cell={cell} cellInfo={cell.getContext().row.original as Item}/>)
+                                    : flexRender(cell.column.columnDef.cell, cell.getContext())
+                                    }
                                 </TableCell>
                                 ))}
                             </TableRow>

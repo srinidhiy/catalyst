@@ -33,6 +33,7 @@ import {
   } from "@/components/ui/dialog"
 import { RequestItemForm } from "./RequestItemForm"
 import { MenuItem } from "@chakra-ui/react"
+import ItemInfo from "./ItemInfo"
   
 
 export default function MainCard() {
@@ -76,6 +77,7 @@ export default function MainCard() {
                 <div className="my-7">
                     <DataTable columns={columns} data={items} />
                 </div>
+
             </div>
         </div>
         

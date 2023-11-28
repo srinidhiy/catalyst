@@ -18,7 +18,7 @@ import { Input } from "@/components/ui/input"
 import { useState } from "react";
 import firebaseConfig from "@/firebase";
 import { initializeApp } from "firebase/app";
-import { doc, getFirestore, setDoc } from "firebase/firestore";
+import { FieldValue, Firestore, doc, getFirestore, increment, setDoc, updateDoc } from "firebase/firestore";
   
 
 const ItemFormSchema = z.object({
@@ -52,6 +52,11 @@ export function RequestItemForm() {
             stock: parseInt(data.stock),
             status: "Pending Approval",
         });
+
+        const itemRef = doc(db, "items", data.name);
+        await updateDoc(itemRef, {
+            requests: increment(1),
+        })
 
         setShowForm(false);
     }
