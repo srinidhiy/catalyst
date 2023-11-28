@@ -24,18 +24,47 @@ import {
     TableRow,
 } from "@/components/ui/table"
 
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+  } from "@/components/ui/dialog"
+
 import { Input } from "../ui/input"
 import { Button } from "../ui/button"
+import { ItemForm } from "./ItemForm"
+import { RequestItemForm } from "./RequestItemForm"
+import { Item } from "@/constants/inventory_columns"
+import { UploadForm } from "./UploadForm"
+import { Label } from "../ui/label"
+import Papa from "papaparse"
+import { Plus, Upload, PenSquare} from "lucide-react"
+
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
     data: TData[]
 }
 
+const emptyItem: Item = {
+    id: "",
+    name: "",
+    vendor: "",
+    stock: 0,
+    location: "",
+}
+
 export function DataTable<TData, TValue>({columns, data}: DataTableProps<TData, TValue>) {
     const [sorting, setSorting] = useState<SortingState>([]);
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
     const [rowSelection, setRowSelection] = useState({});
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
+    const [uploadedItems, setUploadedItems] = useState<Item[]>([]);
+    const [showForm, setShowForm] = useState(false);
     const table = useReactTable({ 
         data, 
         columns, 
@@ -53,9 +82,37 @@ export function DataTable<TData, TValue>({columns, data}: DataTableProps<TData, 
         },
     })
 
+    const changeHandler = (event: any) => {
+        setSelectedFile(event.target.files[0]);
+        Papa.parse(event.target.files[0], {
+            skipEmptyLines: true,
+            complete: function(results) {
+                const headersArray: string[] = results.data[0] as string[];
+                let itemsArray = results.data.slice(1) as string[][];
+                let uploadItems: Item[] = [];
+                itemsArray.forEach((item) => {
+                    let itemObject = {
+                        id: item[0],
+                        name: item[0],
+                        vendor: item[1],
+                        stock: parseInt(item[2]),
+                        location: item[3],
+                        requests: 0,
+                        tag: "In Stock",
+                    };
+                    uploadItems.push(itemObject);
+                    
+                });
+                setUploadedItems(uploadItems);
+                setShowForm(true);
+                console.log(uploadItems);
+            }
+        });
+    }
+
     return (
         <div>
-            <div className="flex items-center pb-4">
+            <div className="flex items-center pb-4 justify-between">
                 <Input
                 placeholder="Filter items..."
                 value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
@@ -64,6 +121,50 @@ export function DataTable<TData, TValue>({columns, data}: DataTableProps<TData, 
                 }
                 className="max-w-sm border-slate-300 rounded-xl"
                 />
+                <div className="flex items-center gap-2">
+                    <Dialog>
+                        <DialogTrigger asChild className="bg-black">
+                            <Button className="bg-blue-650 hover:bg-blue-400 text-white px-6 py-4 rounded-xl"> 
+                                <Plus className="mr-2 h-4 w-4" /> Add Item
+                            </Button>
+                        </DialogTrigger>
+                        <DialogContent className="rounded-xl sm:max-w-[425px] bg-white ">
+                            <h1 className="text-lg font-bold">Add an item.</h1>
+                            <ItemForm item={emptyItem}/>
+                        </DialogContent>
+                    </Dialog>
+
+                    <Dialog>
+                        <DialogTrigger asChild className="bg-black">
+                            <Button className="bg-blue-650 hover:bg-blue-400 text-white px-6 py-4 rounded-xl ">
+                                <PenSquare className="mr-2 h-4 w-4"/>Request Item
+                            </Button>
+                        </DialogTrigger>
+                        <DialogContent className="rounded-xl sm:max-w-[425px] bg-white ">
+                            <h1 className="text-lg font-bold">Request an item.</h1>
+                            <RequestItemForm />
+                        </DialogContent>
+                    </Dialog>
+
+                    <Dialog>
+                        <DialogTrigger asChild className="bg-black">
+                            <Button className="bg-orange-400 hover:bg-orange-200 text-white px-6 py-4 rounded-xl ">
+                                <Upload className="mr-2 h-4 w-4" /> Upload from CSV
+                            </Button>
+                        </DialogTrigger>
+                        <DialogContent className="rounded-xl sm:max-w-[425px] bg-white ">
+                            {
+                            showForm ? (
+                                <UploadForm items={uploadedItems} />
+                            ) : (
+                                <div className="grid w-full max-w-sm items-center gap-1.5">
+                                    <Label htmlFor="file">Inventory CSV File</Label>
+                                    <Input className=" border-neutral-200 rounded-xl mt-2" id="file" type="file" accept=".csv" onChange={changeHandler}/>
+                                </div>
+                            )}
+                        </DialogContent>
+                    </Dialog>
+                </div>
             </div>
             <div className="rounded-xl border bg-slate-50">
             <Table>
@@ -88,16 +189,24 @@ export function DataTable<TData, TValue>({columns, data}: DataTableProps<TData, 
                 <TableBody>
                 {table.getRowModel().rows?.length ? (
                     table.getRowModel().rows.map((row) => (
-                    <TableRow
-                        key={row.id}
-                        data-state={row.getIsSelected() && "selected"}
-                    >
-                        {row.getVisibleCells().map((cell) => (
-                        <TableCell key={cell.id}>
-                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                        </TableCell>
-                        ))}
-                    </TableRow>
+                            <TableRow
+                                key={row.id}
+                                data-state={row.getIsSelected() && "selected"}
+                            >
+                                {row.getVisibleCells().map((cell) => (
+                                <TableCell key={cell.id}>
+                                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                                </TableCell>
+                                ))}
+                            </TableRow>
+                            
+                        // <Dialog>
+                        // <DialogTrigger asChild className="bg-black">
+                        // </DialogTrigger>
+                        // <DialogContent className="rounded-xl sm:max-w-[425px] bg-white ">
+                        //     <h1 className="text-lg font-bold">Add an item.</h1>
+                        // </DialogContent>
+                        // </Dialog>
                     ))
                 ) : (
                     <TableRow>
