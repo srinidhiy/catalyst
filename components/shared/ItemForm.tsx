@@ -19,6 +19,7 @@ import { useState } from "react";
 import firebaseConfig from "@/firebase";
 import { initializeApp } from "firebase/app";
 import { doc, getFirestore, setDoc } from "firebase/firestore";
+import { Item } from "@/constants/inventory_columns";
   
 
 const ItemFormSchema = z.object({
@@ -30,7 +31,11 @@ const ItemFormSchema = z.object({
     location: z.string().min(1),
 });
 
-export function ItemForm() {
+interface ItemFormProps {
+    item: Item;
+}
+
+export function ItemForm({item}: ItemFormProps ) {
     const [showForm, setShowForm] = useState(true);
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
@@ -38,10 +43,10 @@ export function ItemForm() {
     const form = useForm<z.infer<typeof ItemFormSchema>>({
         resolver: zodResolver(ItemFormSchema),
         defaultValues: {
-            name: "",
-            vendor: "",
-            stock: "",
-            location: "",
+            name: item.name,
+            vendor: item.vendor,
+            stock: item.stock?.toString(),
+            location: item.location,
         }
     });
 
@@ -70,8 +75,8 @@ export function ItemForm() {
     return (
         showForm ? (
         <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
-            <FormDescription className=" text-lg font-bold">Add an item to your inventory.</FormDescription>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2 mb-5">
+            {/* <FormDescription className=" text-lg font-bold">Add an item to your inventory.</FormDescription>  */}
             <FormField
             control={form.control}
             name="name"
@@ -120,7 +125,7 @@ export function ItemForm() {
                 </FormItem>
             )}
             />
-            <Button type="submit">Submit</Button>
+            <Button className=" bg-slate-300 rounded-xl hover:bg-slate-400" type="submit">Submit</Button>
         </form>
         </Form>
         ) : (

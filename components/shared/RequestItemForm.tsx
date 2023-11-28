@@ -67,7 +67,7 @@ export function RequestItemForm() {
         showForm ? (
         <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
-            <FormDescription className=" text-lg font-bold">Request an item.</FormDescription>
+            {/* <FormDescription className=" text-lg font-bold">Request an item.</FormDescription> */}
             <FormField
             control={form.control}
             name="name"
@@ -104,7 +104,7 @@ export function RequestItemForm() {
                 </FormItem>
             )}
             />
-            <Button type="submit">Submit</Button>
+            <Button className="bg-slate-300 rounded-xl hover:bg-slate-400" type="submit">Submit</Button>
         </form>
         </Form>
         ) : (
