@@ -11,7 +11,6 @@ import LeftNavbar from "@/components/shared/LeftNavbar";
 import MainCard from "@/components/shared/MainCard";
 import { getItems } from "@/lib/actions/items.actions";
 import { Item } from "@/constants/inventory_columns";
-import { Sidebar } from "@/components/shared/Sidebar";
  
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
@@ -54,7 +53,6 @@ export default function Home() {
     <div className="flex">
     <LeftNavbar />
     <MainCard />
-    <Sidebar />
     </div>
   );
 }
