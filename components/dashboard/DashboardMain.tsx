@@ -17,7 +17,11 @@ import {
     import TotalSpent from '@/views/admin/default/components/TotalSpent';
     import tableDataComplex from '@/views/admin/default/variables/tableDataComplex';
     import MiniCalendar from '@/views/admin/default/components/MiniCalendar';
+    import CheckTable from '@/views/admin/default/components/CheckTable';
+    import tableDataCheck from "@/views/admin/default/variables/tableDataCheck"
     import AppWrappers from '@/components/dashboard/AppWrappers';
+
+
 
 export default function DashboardMain() {
     return (
@@ -37,22 +41,31 @@ export default function DashboardMain() {
             <AppWrappers>
                 <Flex>
             <Box pt={{ }}>
+
+
+        
+      
+
+
       <SimpleGrid
-        columns={{ base: 1, md: 2, lg: 3, '2xl': 6 }}
+        columns={6}
         gap="20px"
-        mb="20px"
-      ></SimpleGrid>
+        mb="20px">
+
+        <Box gridColumn="span 4">
+          <PieCard />
+        </Box>
+        <Box gridColumn="span 2">
+        <CheckTable tableData={tableDataCheck}/>
+        </Box>
+        </SimpleGrid>
 
   
-      <SimpleGrid columns={{ base: 1, md: 2, xl: 2 }} gap="20px" mb="20px">
-        <PieCard />
-        <SimpleGrid columns={{ base: 1, md: 2, xl: 2 }} gap="20px">
-          <Tasks />
-          <MiniCalendar h="100%" minW="100%" selectRange={false} />
-        </SimpleGrid>
+      <SimpleGrid columns={{ base: 1, md: 2, xl: 2}} gap="20px" mb="20px">
         <ComplexTable tableData={tableDataComplex} />
         <TotalSpent />
       </SimpleGrid>
+
       <SimpleGrid columns={{ base: 1, md: 1, xl: 2 }} gap="20px" mb="20px">
         <SimpleGrid columns={{ base: 1, md: 2, xl: 2 }} gap="20px">
         </SimpleGrid>

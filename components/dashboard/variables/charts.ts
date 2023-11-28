@@ -400,11 +400,11 @@ export const InvpieChartData = [74, 21, 5];
 
 export const lineChartDataTotalSpent = [
   {
-    name: "Revenue",
+    name: "Budget",
     data: [50, 64, 48, 66, 49, 68],
   },
   {
-    name: "Profit",
+    name: "Spent",
     data: [30, 40, 24, 46, 20, 46],
   },
 ];

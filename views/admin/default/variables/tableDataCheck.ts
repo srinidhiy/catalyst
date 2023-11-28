@@ -1,47 +1,41 @@
 type RowObj = {
 	name: [string, boolean];
-	progress: string;
 	quantity: number;
 	date: string;
-	info: boolean;
 };
 
 const tableDataCheck: RowObj[] = [
 	{
-		name: [ 'Horizon UI PRO', true ],
-		quantity: 2458,
-		progress: '17.5%',
-		date: '12 Jan 2021',
-		info: true
+		name: [ 'Liquid Nitrogen', false ],
+		quantity: 4,
+		date: '28 Nov 2023',
 	},
 	{
-		name: [ 'Horizon UI Free', true ],
-		quantity: 1485,
-		progress: '10.8%',
-		date: '21 Feb 2021',
-		info: true
+		name: [ 'HPLC Water', true ],
+		quantity: 8,
+		date: '30 Nov 2023',
 	},
 	{
-		name: [ 'Weekly Update', true ],
-		quantity: 1024,
-		progress: '21.3%',
-		date: '13 Mar 2021',
-		info: true
+		name: [ 'Methanol', true ],
+		quantity: 10,
+		date: '30 Nov 2023',
 	},
 	{
-		name: [ 'Venus 3D Asset', true ],
-		quantity: 858,
-		progress: '31.5%',
-		date: '24 Jan 2021',
-		info: true
+		name: [ 'Pipette Tip Boxes', false ],
+		quantity: 16,
+		date: '1 Dec 2023',
 	},
 	{
-		name: [ 'Marketplace', true ],
-		quantity: 258,
-		progress: '12.2%',
-		date: '24 Oct 2022',
-		info: true
-	}
+		name: [ 'Gloves', true ],
+		quantity: 250,
+		date: '15 Dec 2023',
+	},
+	{
+		name: [ 'HEK293 Cells', false ],
+		quantity: 2,
+		date: '23 Dec 2023',
+	},
+
 ];
 
 export default tableDataCheck;
