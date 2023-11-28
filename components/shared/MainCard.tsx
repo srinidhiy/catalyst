@@ -36,6 +36,8 @@ import { MenuItem } from "@chakra-ui/react"
   
 
 export default function MainCard() {
+
+
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
     const [items, setItems] = useState<Item[]>([]);
@@ -132,23 +134,7 @@ export default function MainCard() {
                             <RequestItemForm />
                         </DialogContent>
                         </Dialog>
-
-                        <Dialog>
-                        <DialogTrigger asChild className="bg-black">
-                            <button className="bg-orange-400 hover:bg-orange-200 text-white mt-3 px-6 py-2 rounded-2xl ">Upload from CSV</button>
-                        </DialogTrigger>
-                        <DialogContent className="rounded-xl sm:max-w-[425px] bg-white ">
-                            {
-                            showForm ? (
-                                <UploadForm items={uploadedItems} />
-                            ) : (
-                                <div className="grid w-full max-w-sm items-center gap-1.5">
-                                    <Label htmlFor="file">Inventory CSV File</Label>
-                                    <Input className=" border-neutral-200 rounded-xl mt-2" id="file" type="file" accept=".csv" onChange={changeHandler}/>
-                                </div>
-                            )}
-                        </DialogContent>
-                        </Dialog>
+                        <button className="bg-orange-400 hover:bg-orange-200 text-white mt-3 px-6 py-4 rounded-2xl ">Upload from CSV</button>
                     </div>
                     <div className="flex flex-col py-2">
                         <h1>Items at risk</h1>

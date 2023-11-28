@@ -2,23 +2,19 @@
 
 import firebaseConfig from "../../firebase";
 import { initializeApp } from "firebase/app";
-import { getFirestore, getDocs, collection } from "firebase/firestore";
+import { getFirestore } from "firebase/firestore";
 
 import { useAuth } from "@clerk/nextjs";
 import { getAuth, signInWithCustomToken } from "firebase/auth";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import LeftNavbar from "@/components/shared/LeftNavbar";
-import MainCard from "@/components/shared/MainCard";
-import { getItems } from "@/lib/actions/items.actions";
-import { Item } from "@/constants/inventory_columns";
-import { Sidebar } from "@/components/shared/Sidebar";
+import RequestsMain from "@/components/requests/requestsMain";
  
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-export default function Home() {
+export default function Requests() {
   const { getToken } = useAuth();
-  const [items, setItems] = useState<Item[]>([]);
  
   // useEffect(() => {
   //   const signInWithClerk = async () => {
@@ -32,29 +28,14 @@ export default function Home() {
   //      */
   //     console.log("user ::", userCredentials.user);
   //   };
-
-  //   // const getInventory = async() => {
-  //   //     const items: Item[] = [];
-  //   //     console.log("Getting items");
-  //   //     const querySnapshot = await getDocs(collection(db, "items"));
-  //   //     querySnapshot.forEach((doc) => {
-  //   //         console.log(doc.id, " => ", doc.data());
-
-  //   //         items.push(doc.data() as Item);
-  //   //     });
-  //   //     setItems(items);
-  //   // }
-  //   // getInventory();
  
   //   signInWithClerk();
-
   // }, []);
  
   return (
     <div className="flex">
-    <LeftNavbar />
-    <MainCard />
-    <Sidebar />
+      <LeftNavbar />
+      <RequestsMain />
     </div>
   );
 }
