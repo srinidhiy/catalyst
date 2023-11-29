@@ -43,13 +43,14 @@ import {
 import { Input } from "../ui/input"
 import { Button } from "../ui/button"
 import { DenyForm } from './DenyForm';
+import RequestLink from './RequestLink';
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
     data: TData[]
 }
 
-interface Request {
+interface RequestData {
     name: string;
     vendor: string;
     stock: number;
@@ -86,7 +87,7 @@ export function RequestTable<TData, TValue>({columns, data}: DataTableProps<TDat
    // Update the array of selected names when the selected rows change
    let names: string[] = [];
    table.getFilteredSelectedRowModel().rows.forEach((row) => {
-    const name = row.original as Request;
+    const name = row.original as RequestData;
     names.push(name.name);
    });
 
@@ -230,6 +231,10 @@ export function RequestTable<TData, TValue>({columns, data}: DataTableProps<TDat
                                     <div style={{backgroundColor: 'orange'}} className="w-2 h-2 rounded-full mr-2"></div>
                                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                                 </div>
+                            ) :
+                            cell.getContext().column.id === "name"
+                            ? (
+                                <RequestLink cell={cell} cellInfo={cell.getContext().row.original as RequestData}/>
                             )
                             : flexRender(cell.column.columnDef.cell, cell.getContext())
                             }
