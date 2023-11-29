@@ -50,7 +50,6 @@ export default function MainCard () {
                 console.log(doc.id, " => ", doc.data());
                 let item = doc.data() as Item;
                 const tagInfo = await getTag(item.currStock, item.stock, (item.requests > 0), item.lastOrder);
-                console.log(tagInfo)
                 item.tag = tagInfo.tag;
                 item.tagColor = tagInfo.color;
                 items.push(item);

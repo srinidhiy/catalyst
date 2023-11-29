@@ -18,7 +18,7 @@ import { Input } from "@/components/ui/input"
 import { useState } from "react";
 import firebaseConfig from "@/firebase";
 import { initializeApp } from "firebase/app";
-import { FieldValue, Firestore, doc, getFirestore, increment, setDoc, updateDoc } from "firebase/firestore";
+import { FieldValue, Firestore, doc, getDoc, getFirestore, increment, setDoc, updateDoc } from "firebase/firestore";
 import { currentUser, useUser } from "@clerk/nextjs";
   
 
@@ -28,6 +28,7 @@ const ItemFormSchema = z.object({
     }).min(1),
     vendor: z.string().min(1),
     stock: z.string().min(1),
+    link: z.string(),
 });
 
 export function RequestItemForm() {
@@ -43,6 +44,7 @@ export function RequestItemForm() {
             name: "",
             vendor: "",
             stock: "",
+            link: "",
         }
     });
 
@@ -54,14 +56,17 @@ export function RequestItemForm() {
             vendor: data.vendor,
             stock: parseInt(data.stock),
             status: "Pending Approval",
-            user: user?.primaryEmailAddress?.emailAddress
+            user: user?.primaryEmailAddress?.emailAddress,
+            link: data.link,
         });
 
         const itemRef = doc(db, "items", data.name);
-        await updateDoc(itemRef, {
-            requests: increment(1),
-        })
-
+        const itemDoc = await getDoc(itemRef);
+        if (itemDoc.exists()) {
+            await updateDoc(itemRef, {
+                requests: increment(1),
+            })
+        }
         setShowForm(false);
     }
 
@@ -107,6 +112,18 @@ export function RequestItemForm() {
             render={({ field }) => (
                 <FormItem>
                 <FormLabel>Amount of Stock</FormLabel>
+                <FormControl>
+                    <Input placeholder="" {...field} />
+                </FormControl>
+                </FormItem>
+            )}
+            />
+            <FormField
+            control={form.control}
+            name="link"
+            render={({ field }) => (
+                <FormItem>
+                <FormLabel>Link to item</FormLabel>
                 <FormControl>
                     <Input placeholder="" {...field} />
                 </FormControl>

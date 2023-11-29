@@ -24,6 +24,8 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
+import { Button } from '@chakra-ui/react';
+import { X } from 'lucide-react';
 
 interface SidebarItem {
   title: string;
@@ -86,7 +88,9 @@ export default function Sidebar ({cell, cellInfo}: SidebarProps) {
         aria-label="toggle sidebar"
       >
         {/*HERE IS WHERE IT TRIGGERS OPENING*/}
+        <u>
         {flexRender(cell.column.columnDef.cell, cell.getContext())}
+        </u>
       </button>
 
       <AnimatePresence mode="wait" initial={false}>
@@ -104,15 +108,17 @@ export default function Sidebar ({cell, cellInfo}: SidebarProps) {
               aria-label="Sidebar"
             >
               <div className="flex items-center justify-between p-5 border-b-2 border-[#cbd1d6]" style={{ color: '#505559' }}>
-                <span>FILLER</span>
-                <button
-                  onClick={toggleSidebar}
-                  aria-label="close sidebar"
-                >
-                </button>
+                <div className="flex flex-col">
+                <span className=' font-bold text-2xl'>{cellInfo.name}</span>
+                <span className=' font-medium text-lg'>{cellInfo.vendor}</span>
+                </div>
+                <Button onClick={toggleSidebar}>
+                  <X size={24} />  
+                </Button>
               </div>
               <ul>
-                {items.map((item, idx) => (
+                
+                {/* {items.map((item, idx) => (
                   <li key={item.title}>
                     <a
                       onClick={toggleSidebar}
@@ -127,7 +133,7 @@ export default function Sidebar ({cell, cellInfo}: SidebarProps) {
                       </motion.span>
                     </a>
                   </li>
-                ))}
+                ))} */}
               </ul>
             </motion.div>
           </>
