@@ -45,6 +45,13 @@ interface DataTableProps<TData, TValue> {
     data: TData[]
 }
 
+interface Request {
+    name: string;
+    vendor: string;
+    stock: number;
+    link: string;
+}
+
 export function RequestTable<TData, TValue>({columns, data}: DataTableProps<TData, TValue>) {
     const [sorting, setSorting] = useState<SortingState>([]);
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -75,18 +82,9 @@ export function RequestTable<TData, TValue>({columns, data}: DataTableProps<TDat
    // Update the array of selected names when the selected rows change
    let names: string[] = [];
    table.getFilteredSelectedRowModel().rows.forEach((row) => {
-     row.getVisibleCells().forEach((cell) => {
-       if (cell.column.id === 'name') {
-         const renderedValue = flexRender(cell.column.columnDef.cell, cell.getContext());
-   
-         // Check if the result is a string before pushing it to the names array
-         if (typeof renderedValue === 'string') {
-           names.push(renderedValue);
-         }
-       }
-     });
+    const name = row.original as Request;
+    names.push(name.name);
    });
-   
 
 
     return (

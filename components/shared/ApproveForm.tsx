@@ -47,9 +47,14 @@ export function ApproveForm({ namesArray }: ApproveFormProps) {
         
         console.log(namesArray)
         namesArray.forEach(async (name) => {
-            const itemRef = doc(db, "requests", name);
-            await updateDoc(itemRef, {
+            const requestRef = doc(db, "requests", name);
+            await updateDoc(requestRef, {
                 status: "Ordered " + data.status,
+            })
+
+            const itemRef = doc(db, "items", name);
+            await updateDoc(itemRef, {
+                lastOrder: data.status,
             })
 
         });

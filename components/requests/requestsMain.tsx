@@ -20,10 +20,10 @@ export default function RequestsMain() {
     useEffect(() => {
         const getInventory = async() => {
             const items: Item[] = [];
-            console.log("Getting items");
+            // console.log("Getting items");
             const querySnapshot = await getDocs(collection(db, "requests"));
             querySnapshot.forEach((doc) => {
-                console.log(doc.id, " => ", doc.data());
+                // console.log(doc.id, " => ", doc.data());
     
                 items.push(doc.data() as Item);
             });

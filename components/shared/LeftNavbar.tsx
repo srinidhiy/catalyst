@@ -29,7 +29,7 @@ export default function LeftNavbar() {
                 {
                     sidebarLinks.map((link) => {
                     const isActive = (pathname.includes(link.route) && link.route.length > 1) || pathname == link.route;
-                    console.log("isActive", isActive, pathname, link.route)
+                    // console.log("isActive", isActive, pathname, link.route)
 
                     return (
                         <div className={isActive ? activeBackground : background}>
