@@ -31,7 +31,12 @@ const ItemFormSchema = z.object({
     link: z.string(),
 });
 
-export function RequestItemForm() {
+interface RequestItemFormProps {
+    name: string;
+    vendor: string;
+}
+
+export function RequestItemForm({name, vendor}: RequestItemFormProps) {
     const [showForm, setShowForm] = useState(true);
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
@@ -41,8 +46,8 @@ export function RequestItemForm() {
     const form = useForm<z.infer<typeof ItemFormSchema>>({
         resolver: zodResolver(ItemFormSchema),
         defaultValues: {
-            name: "",
-            vendor: "",
+            name: name,
+            vendor: vendor,
             stock: "",
             link: "",
         }

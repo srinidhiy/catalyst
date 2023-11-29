@@ -48,13 +48,6 @@ interface DataTableProps<TData, TValue> {
     data: TData[]
 }
 
-const emptyItem: Item = {
-    id: "",
-    name: "",
-    vendor: "",
-    stock: 0,
-    location: "",
-}
 
 export function RequestTable<TData, TValue>({columns, data}: DataTableProps<TData, TValue>) {
     const [sorting, setSorting] = useState<SortingState>([]);

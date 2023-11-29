@@ -30,13 +30,10 @@ interface TagInfoProps {
 export default function TagInfo({ cell, cellInfo }: TagInfoProps) {
     let tag = cellInfo.tag;
     let tagColor = cellInfo.tagColor;
-    console.log("TAG: ", cellInfo);
-    const indicator = `w-2 h-2 rounded-full mr-2 bg-${tagColor}-500`
-    console.log(indicator)
 
     return (
         <div className="flex items-center">
-            <div className={indicator}></div>
+            <div style={{backgroundColor: tagColor}} className="w-2 h-2 rounded-full mr-2"></div>
             {flexRender(cell.column.columnDef.cell, cell.getContext())}
         </div>
     )

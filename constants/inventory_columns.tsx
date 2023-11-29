@@ -72,7 +72,7 @@ export const columns: ColumnDef<Item>[] = [
                 </Button>
             )
         },
-        accessorKey: "stock",
+        accessorKey: "currStock",
     },
     {
         header: ({ column }) => {

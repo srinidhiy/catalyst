@@ -1,5 +1,5 @@
 
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useClickAway } from 'react-use';
 import { Item } from '@/constants/inventory_columns';
@@ -26,6 +26,13 @@ import {
 } from "@/components/ui/table"
 import { Button } from '@chakra-ui/react';
 import { X } from 'lucide-react';
+import firebaseConfig from '@/firebase';
+import { initializeApp } from 'firebase/app';
+import { getFirestore, getDocs, collection, doc, getDoc, updateDoc, increment } from 'firebase/firestore';
+import { ScrollArea } from '../ui/scroll-area';
+import { PenSquare } from 'lucide-react';
+import { Dialog, DialogContent, DialogTrigger } from '../ui/dialog';
+import { RequestItemForm } from './RequestItemForm';
 
 interface SidebarItem {
   title: string;
@@ -65,21 +72,57 @@ interface SidebarProps {
     cellInfo: Item;
 }
 
+interface Order{
+  date: string;
+  received: string;
+  quantity: number;
+}
 
-export default function Sidebar ({cell, cellInfo}: SidebarProps) {
-    console.log(cellInfo.name);
+
+export default function ItemInfo ({cell, cellInfo}: SidebarProps) {
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  console.log(cellInfo.name);
   const [open, setOpen] = useState(false);
+  const [orders, setOrders] = useState<Order[]>([]); // [date, date, date
   const ref = useRef(null);
-  useClickAway(ref, () => setOpen(false));
+  // useClickAway(ref, () => setOpen(false));
   const toggleSidebar = () => setOpen((prev) => !prev);
 
-  const items: SidebarItem[] = [
-    { title: 'Name', description: 'Filler description. more more more more more more more more more more \n more more mroemoremoremore'},
-    { title: 'About', description: 'Filler description'},
-    { title: 'Order History', description: 'Filler description'},
-    { title: 'Requests', description: 'Filler description'},
-    { title: 'Other', description: 'Filler description'},
-  ];
+  useEffect(() => {
+    const getOrders = async() => {
+      let order_array: Order[] = [];
+      const querySnapshot = await getDocs(collection(db, "items", cellInfo.name, "orders"));
+      if (querySnapshot.docs.length > 0) {
+        querySnapshot.forEach((doc) => {
+          order_array.push(doc.data() as Order);
+        });
+      }
+      setOrders(order_array);
+    }
+    getOrders();
+  }, [])
+
+  async function onIncrease() {
+    const itemRef = doc(db, "items", cellInfo.name);
+    const itemDoc = await getDoc(itemRef);
+    if (itemDoc.exists()) {
+        await updateDoc(itemRef, {
+            currStock: increment(1),
+        })
+    }
+  }
+
+  async function onDecrease() {
+    const itemRef = doc(db, "items", cellInfo.name);
+    const itemDoc = await getDoc(itemRef);
+    if (itemDoc.exists()) {
+        await updateDoc(itemRef, {
+            currStock: increment(-1),
+        })
+    }
+  }
+
 
   return (
     <>
@@ -95,7 +138,7 @@ export default function Sidebar ({cell, cellInfo}: SidebarProps) {
 
       <AnimatePresence mode="wait" initial={false}>
         {open && (
-          <>
+          <div>
             <motion.div
               {...framerSidebarBackground}
               aria-hidden="true"
@@ -112,31 +155,78 @@ export default function Sidebar ({cell, cellInfo}: SidebarProps) {
                 <span className=' font-bold text-2xl'>{cellInfo.name}</span>
                 <span className=' font-medium text-lg'>{cellInfo.vendor}</span>
                 </div>
-                <Button onClick={toggleSidebar}>
+              <Button className='p-5' onClick={toggleSidebar}>
                   <X size={24} />  
                 </Button>
               </div>
-              <ul>
-                
-                {/* {items.map((item, idx) => (
-                  <li key={item.title}>
-                    <a
-                      onClick={toggleSidebar}
-                      className="flex flex-col gap-2 p-5 transition-all border-b-2 hover:bg-[#cbd1d6] border-[#cbd1d6]"
-                      >
-                      <motion.span {...framerText({ delay: 0 })} style={{ color: '#505559', fontWeight: 'bold' }}>
-                        {item.title}
-                      </motion.span>
+        
+              <div className='flex flex-col p-5 gap-4 border-b-2 border-[#cbd1d6]'>
+                <div className='flex flex-row justify-between'>
+                  <p>Number of requests: </p>
+                  <p>{cellInfo.requests}</p>
+                </div>
+                <div className='flex flex-row justify-between'>
+                  <p>Last order: </p>
+                  <p>{cellInfo.lastOrder}</p>
+                </div>
+                <div className='flex flex-row justify-between'>
+                  <p>Recommended time to order: </p>
+                  <p>{cellInfo.tag}</p>
+                </div>
+              </div>
+              
+              <ScrollArea className='flex flex-col p-5 gap-4 border-b-2 max-h-1/4 border-[#cbd1d6]'>
+                <h3 className='font-semibold'><u>Order History:</u></h3>
+                {orders.length > 0 ? (
+                <div className=' mt-1 flex flex-row justify-between font-semibold'>
+                  <p>Order Date</p>
+                  <p>Delivery Date</p>
+                  <p>Order Placed</p>
+                </div>
+                )
+                : (
+                  <p className='mt-1'>No orders found.</p>
+                )
+                }
+          
+                {orders.map((order) => (
+                  <div className='mt-1 flex flex-row justify-between'>
+                    <p>{order.date}</p>
+                    <p>{order.received}</p>
+                    <p>{order.quantity} Units</p>
+                  </div>
+                ))}
+              </ScrollArea>
 
-                      <motion.span {...framerText({ delay: 0 })} style={{ fontSize: '0.8em', color: '#505559' }}>
-                      {item.description}
-                      </motion.span>
-                    </a>
-                  </li>
-                ))} */}
-              </ul>
+              <div className='flex flex-col p-5 gap-4 '>
+                <div className='flex flex-col items-center'>
+                  <p className=' font-semibold text-lg'>Current stock: </p>
+                  <p className='text-lg mt-1'>{cellInfo.currStock} Units</p>
+                </div>
+                <div className='flex flex-row justify-center gap-3'>
+                  <Button onClick={onDecrease} className='p-3 bg-blue-650 rounded-xl hover:bg-blue-300 text-white font-semibold'>Decrease</Button>
+                  <Button onClick={onIncrease} className='p-3 bg-blue-650 rounded-xl hover:bg-blue-300 text-white font-semibold'>Increase</Button>
+                </div>
+              </div>
+
+              <div>
+                <div className='flex justify-center absolute inset-x-0 bottom-0 border-t-2 border-[#cbd1d6] py-5'>
+                  <Dialog>
+                    <DialogTrigger asChild className="bg-black">
+                        <Button className='  p-3 bg-blue-650 rounded-xl hover:bg-blue-300 text-white font-semibold'>
+                            <PenSquare className="mr-2 h-4 w-4"/>Request Item
+                        </Button>
+                    </DialogTrigger>
+                    <DialogContent className="rounded-xl sm:max-w-[425px] bg-white ">
+                        <h1 className="text-lg font-bold">Request an item.</h1>
+                        <RequestItemForm name={cellInfo.name} vendor={cellInfo.vendor} />
+                    </DialogContent>
+                  </Dialog>
+                </div>
+              </div>
+
             </motion.div>
-          </>
+            </div>
         )}
       </AnimatePresence>
     </>

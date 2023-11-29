@@ -150,7 +150,7 @@ export function DataTable<TData, TValue>({columns, data}: DataTableProps<TData, 
                         </DialogTrigger>
                         <DialogContent className="rounded-xl sm:max-w-[425px] bg-white ">
                             <h1 className="text-lg font-bold">Request an item.</h1>
-                            <RequestItemForm />
+                            <RequestItemForm name="" vendor=""/>
                         </DialogContent>
                     </Dialog>
 
@@ -236,10 +236,10 @@ export function DataTable<TData, TValue>({columns, data}: DataTableProps<TData, 
             </div>
             <div className="flex">
             <div className="flex-1 text-sm text-muted-foreground py-4">
-                {table.getFilteredSelectedRowModel().rows.length} of{" "}
-                {table.getFilteredRowModel().rows.length} row(s) selected.
+                {/* {table.getFilteredSelectedRowModel().rows.length} of{" "}
+                {table.getFilteredRowModel().rows.length} row(s) selected. */}
             </div>
-            <div className="flex items-center justify-end space-x-2">
+            <div className="flex items-center justify-end space-x-2 mt-2">
                 <Button
                 variant="outline"
                 size="sm"
