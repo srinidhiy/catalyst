@@ -35,7 +35,9 @@ export default function Requests() {
   return (
     <div className="flex">
       <LeftNavbar />
+      <div className="flex flex-col w-full bg-slate-100">
       <RequestsMain />
+      </div>
     </div>
   );
 }

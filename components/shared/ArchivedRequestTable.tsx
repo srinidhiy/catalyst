@@ -42,6 +42,8 @@ import {
 
 import { Input } from "../ui/input"
 import { Button } from "../ui/button"
+import RequestTagInfo from "./RequestTagInfo";
+import { ArchiveRequest } from '@/constants/archivedrequestcolumns';
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
@@ -55,7 +57,7 @@ interface Request {
     link: string;
 }
 
-export function RequestTable<TData, TValue>({columns, data}: DataTableProps<TData, TValue>) {
+export function ArchivedRequestTable<TData, TValue>({columns, data}: DataTableProps<TData, TValue>) {
     const [sorting, setSorting] = useState<SortingState>([]);
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
     const [rowSelection, setRowSelection] = useState({});
@@ -89,71 +91,12 @@ export function RequestTable<TData, TValue>({columns, data}: DataTableProps<TDat
     names.push(name.name);
    });
 
+   
 
     return (
         <div>
             <div className="flex items-center pb-4 justify-between">
-            <h1 className="text-2xl font-bold">Incoming Requests</h1>
-            <div className='flex gap-2'>
-            <div className="flex items-center gap-2">
-                <Input
-                placeholder="Filter items..."
-                value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
-                onChange={(event) =>
-                    table.getColumn("name")?.setFilterValue(event.target.value)
-                }
-                className="max-w-sm border-slate-300 rounded-xl"
-                />
-                    <Dialog>
-                        <DialogTrigger asChild className="bg-black">
-                            <Button className="bg-blue-650 hover:bg-blue-400 text-white px-6 py-4 rounded-xl ">
-                                <PenSquare className="mr-2 h-4 w-4"/>Request Item
-                            </Button>
-                        </DialogTrigger>
-                        <DialogContent className="rounded-xl sm:max-w-[425px] bg-white ">
-                            <h1 className="text-lg font-bold">Request an item.</h1>
-                            <RequestItemForm name="" vendor=""/>
-                        </DialogContent>
-                    </Dialog>
-
-                    <Dialog>
-                        <DialogTrigger asChild className="bg-black">
-                            <Button className="bg-blue-650 hover:bg-blue-400 text-white px-6 py-4 rounded-xl " disabled={table.getFilteredSelectedRowModel().rows.length === 0}>
-                               Approve Item(s)
-                            </Button>
-                        </DialogTrigger>
-                        <DialogContent className="rounded-xl sm:max-w-[425px] bg-white ">
-                            <h1 className="text-lg font-bold">Items to be Approved:</h1>
-                            <ul>
-                {table.getFilteredSelectedRowModel().rows.map((row) => (
-                  <li key={row.id}>
-                    Name:{' '} 
-                    {row.getVisibleCells().map((cell) => (
-                      <span key={cell.id}>
-                        {cell.column.id === 'name' ? flexRender(cell.column.columnDef.cell, cell.getContext()): ''}
-                      </span>
-                    ))}{', '}
-                    Vendor:{' '}
-                    {row.getVisibleCells().map((cell) => (
-                      <span key={cell.id}>
-                        {cell.column.id === 'vendor' ? flexRender(cell.column.columnDef.cell, cell.getContext()): ''}
-                      </span>
-                    ))}{', '}
-                    Stock:{' '}
-                    {row.getVisibleCells().map((cell) => (
-                      <span key={cell.id}>
-                        {cell.column.id === 'stock' ? flexRender(cell.column.columnDef.cell, cell.getContext()): ''}
-                      </span>
-                    ))}
-                  </li>
-                ))}
-              </ul>
-                            <ApproveForm namesArray={names}/>
-                        </DialogContent>
-                    </Dialog>
-                    
-                    </div>
-            </div>
+            <h1 className="text-2xl font-bold">Archive</h1>
             </div>
 
             
@@ -189,10 +132,7 @@ export function RequestTable<TData, TValue>({columns, data}: DataTableProps<TDat
                             {
                             cell.getContext().column.id === "status" 
                             ? (
-                                <div className="flex items-center">
-                                    <div style={{backgroundColor: 'orange'}} className="w-2 h-2 rounded-full mr-2"></div>
-                                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                                </div>
+                                <RequestTagInfo cell={cell} cellInfo={row.original as ArchiveRequest}/>
                             )
                             : flexRender(cell.column.columnDef.cell, cell.getContext())
                             }
