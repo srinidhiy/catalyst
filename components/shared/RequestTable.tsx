@@ -42,6 +42,7 @@ import {
 
 import { Input } from "../ui/input"
 import { Button } from "../ui/button"
+import { DenyForm } from './DenyForm';
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
@@ -149,6 +150,42 @@ export function RequestTable<TData, TValue>({columns, data}: DataTableProps<TDat
                 ))}
               </ul>
                             <ApproveForm namesArray={names}/>
+                        </DialogContent>
+                    </Dialog>
+
+                    <Dialog>
+                        <DialogTrigger asChild className="bg-black">
+                            <Button className="bg-blue-650 hover:bg-blue-400 text-white px-6 py-4 rounded-xl " disabled={table.getFilteredSelectedRowModel().rows.length === 0}>
+                               Deny Item(s)
+                            </Button>
+                        </DialogTrigger>
+                        <DialogContent className="rounded-xl sm:max-w-[425px] bg-white ">
+                            <h1 className="text-lg font-bold">Items to be Denied:</h1>
+                            <ul>
+                {table.getFilteredSelectedRowModel().rows.map((row) => (
+                  <li key={row.id}>
+                    Name:{' '} 
+                    {row.getVisibleCells().map((cell) => (
+                      <span key={cell.id}>
+                        {cell.column.id === 'name' ? flexRender(cell.column.columnDef.cell, cell.getContext()): ''}
+                      </span>
+                    ))}{', '}
+                    Vendor:{' '}
+                    {row.getVisibleCells().map((cell) => (
+                      <span key={cell.id}>
+                        {cell.column.id === 'vendor' ? flexRender(cell.column.columnDef.cell, cell.getContext()): ''}
+                      </span>
+                    ))}{', '}
+                    Stock:{' '}
+                    {row.getVisibleCells().map((cell) => (
+                      <span key={cell.id}>
+                        {cell.column.id === 'stock' ? flexRender(cell.column.columnDef.cell, cell.getContext()): ''}
+                      </span>
+                    ))}
+                  </li>
+                ))}
+              </ul>
+                            <DenyForm namesArray={names}/>
                         </DialogContent>
                     </Dialog>
                     

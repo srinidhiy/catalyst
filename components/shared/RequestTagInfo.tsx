@@ -16,7 +16,7 @@ interface TagInfoProps {
 
 export default function RequestTagInfo({ cell, cellInfo }: TagInfoProps) {
     console.log(cellInfo);
-    let tagColor = cellInfo.status == "Rejected" ? "red" : "green";
+    let tagColor = cellInfo.status.substring(0, 6) == "Denied" ? "red" : "green";
 
     return (
         <div className="flex items-center">

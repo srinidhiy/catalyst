@@ -30,7 +30,7 @@ const ItemFormSchema = z.object({
     }).min(1),
 });
 
-export function ApproveForm({ namesArray }: ApproveFormProps) {
+export function DenyForm({ namesArray }: ApproveFormProps) {
     const [showForm, setShowForm] = useState(true);
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
@@ -49,14 +49,8 @@ export function ApproveForm({ namesArray }: ApproveFormProps) {
         namesArray.forEach(async (name) => {
             const requestRef = doc(db, "requests", name);
             await updateDoc(requestRef, {
-                status: "Ordered on " + data.status,
+                status: "Denied on " + data.status,
             })
-
-            const itemRef = doc(db, "items", name);
-            await updateDoc(itemRef, {
-                lastOrder: data.status,
-            })
-
         });
 
 
@@ -80,7 +74,7 @@ export function ApproveForm({ namesArray }: ApproveFormProps) {
             name="status"
             render={({ field }) => (
                 <FormItem>
-                <FormLabel>Order Date </FormLabel>
+                <FormLabel>Denied Date </FormLabel>
                 <FormControl>
                     <Input placeholder="MM-DD-YYYY" {...field} />
                 </FormControl>
@@ -93,8 +87,7 @@ export function ApproveForm({ namesArray }: ApproveFormProps) {
         </Form>
         ) : (
             <div className="flex flex-col items-center justify-center w-full">
-                <h1 className="text-lg font-bold">Item(s) approved!</h1>
-                <Button onClick={onAdded}>Approve another item.</Button>
+                <h1 className="text-lg font-bold">Item(s) denied.</h1>
             </div>
         )
     )
