@@ -9,10 +9,13 @@ export type Item = {
     id: string;
     name: string;
     vendor: string;
-    stock ?: number;
-    requests ?: number;
+    stock: number;
+    currStock: number;
+    lastOrder: string;
+    requests: number;
     location ?: string;
     tag ?: string;
+    tagColor ?: string;
 }
 
 export const columns: ColumnDef<Item>[] = [

@@ -7,7 +7,7 @@ import { usePathname, useRouter } from  "next/navigation"
 import {sidebarLinks} from "@/constants"
 import { SignedIn, UserButton } from "@clerk/nextjs"
 import { Input } from "../ui/input"
-import { getItems } from "@/lib/actions/items.actions"
+import { getItems, getTag } from "@/lib/actions/items.actions"
 import { DataTable } from "./DataTable"
 import {Item, columns} from "../../constants/inventory_columns"
 import { useEffect, useState } from "react"
@@ -36,7 +36,7 @@ import { MenuItem } from "@chakra-ui/react"
 import ItemInfo from "./ItemInfo"
   
 
-export default function MainCard() {
+export default function MainCard () {
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
     const [items, setItems] = useState<Item[]>([]);
@@ -46,11 +46,15 @@ export default function MainCard() {
             const items: Item[] = [];
             console.log("Getting items");
             const querySnapshot = await getDocs(collection(db, "items"));
-            querySnapshot.forEach((doc) => {
+            for (const doc of querySnapshot.docs) {
                 console.log(doc.id, " => ", doc.data());
-    
-                items.push(doc.data() as Item);
-            });
+                let item = doc.data() as Item;
+                const tagInfo = await getTag(item.currStock, item.stock, (item.requests > 0), item.lastOrder);
+                console.log(tagInfo)
+                item.tag = tagInfo.tag;
+                item.tagColor = tagInfo.color;
+                items.push(item);
+            }
             setItems(items);
         }
         getInventory();
@@ -74,7 +78,7 @@ export default function MainCard() {
             <div className="px-10 h-screen w-full">
                 
 
-                <div className="my-7">
+                <div className="my-2">
                     <DataTable columns={columns} data={items} />
                 </div>
 

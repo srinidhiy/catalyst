@@ -20,7 +20,7 @@ import firebaseConfig from "@/firebase";
 import { initializeApp } from "firebase/app";
 import { doc, getFirestore, setDoc } from "firebase/firestore";
 import { Item } from "@/constants/inventory_columns";
-  
+import dayjs from "dayjs";
 
 const ItemFormSchema = z.object({
     name: z.string({
@@ -58,6 +58,8 @@ export function ItemForm({item}: ItemFormProps ) {
             vendor: data.vendor,
             stock: parseInt(data.stock),
             location: data.location,
+            currStock: parseInt(data.stock),
+            lastOrder: (dayjs().format("MM-DD-YYYY")).toString(),
             requests: 0,
             tag: "In Stock",
         });

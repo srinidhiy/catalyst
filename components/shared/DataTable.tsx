@@ -45,6 +45,7 @@ import Papa from "papaparse"
 import { Plus, Upload, PenSquare} from "lucide-react"
 import Link from "next/link"
 import ItemInfo from "./ItemInfo"
+import TagInfo from "./TagInfo"
 
 
 interface DataTableProps<TData, TValue> {
@@ -57,6 +58,9 @@ const emptyItem: Item = {
     name: "",
     vendor: "",
     stock: 0,
+    requests: 0,
+    currStock: 0,
+    lastOrder: "",
     location: "",
 }
 
@@ -98,7 +102,9 @@ export function DataTable<TData, TValue>({columns, data}: DataTableProps<TData, 
                         name: item[0],
                         vendor: item[1],
                         stock: parseInt(item[2]),
+                        currStock: parseInt(item[2]),
                         location: item[3],
+                        lastOrder: item[4],
                         requests: 0,
                         tag: "In Stock",
                     };
@@ -197,8 +203,13 @@ export function DataTable<TData, TValue>({columns, data}: DataTableProps<TData, 
                             >
                                 {row.getVisibleCells().map((cell) => (
                                 <TableCell key={cell.id}>
-                                    {cell.getContext().column.id === "name" 
+                                    {
+                                    cell.getContext().column.id === "name" 
                                     ? (<ItemInfo cell={cell} cellInfo={cell.getContext().row.original as Item}/>)
+                                    : cell.getContext().column.id === "tag"
+                                    ? (
+                                        <TagInfo cell={cell} cellInfo={cell.getContext().row.original as Item}/>
+                                    )
                                     : flexRender(cell.column.columnDef.cell, cell.getContext())
                                     }
                                 </TableCell>
@@ -228,7 +239,7 @@ export function DataTable<TData, TValue>({columns, data}: DataTableProps<TData, 
                 {table.getFilteredSelectedRowModel().rows.length} of{" "}
                 {table.getFilteredRowModel().rows.length} row(s) selected.
             </div>
-            <div className="flex items-center justify-end space-x-2 py-4">
+            <div className="flex items-center justify-end space-x-2">
                 <Button
                 variant="outline"
                 size="sm"

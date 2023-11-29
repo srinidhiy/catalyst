@@ -19,6 +19,7 @@ import { useState } from "react";
 import firebaseConfig from "@/firebase";
 import { initializeApp } from "firebase/app";
 import { FieldValue, Firestore, doc, getFirestore, increment, setDoc, updateDoc } from "firebase/firestore";
+import { currentUser, useUser } from "@clerk/nextjs";
   
 
 const ItemFormSchema = z.object({
@@ -33,6 +34,8 @@ export function RequestItemForm() {
     const [showForm, setShowForm] = useState(true);
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
+
+    const { user } = useUser();
 
     const form = useForm<z.infer<typeof ItemFormSchema>>({
         resolver: zodResolver(ItemFormSchema),
@@ -51,6 +54,7 @@ export function RequestItemForm() {
             vendor: data.vendor,
             stock: parseInt(data.stock),
             status: "Pending Approval",
+            user: user?.primaryEmailAddress?.emailAddress
         });
 
         const itemRef = doc(db, "items", data.name);
