@@ -34,6 +34,7 @@ import {
     DialogTrigger,
   } from "@/components/ui/dialog"
 
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Input } from "../ui/input"
 import { Button } from "../ui/button"
 import { ItemForm } from "./ItemForm"
@@ -52,6 +53,7 @@ interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
     data: TData[]
 }
+
 
 const emptyItem: Item = {
     id: "",
@@ -209,6 +211,11 @@ export function DataTable<TData, TValue>({columns, data}: DataTableProps<TData, 
                                     : cell.getContext().column.id === "tag"
                                     ? (
                                         <TagInfo cell={cell} cellInfo={cell.getContext().row.original as Item}/>
+                                    )
+                                    : cell.getContext().column.id === "requests"
+                                    ? (
+                                        // <RequestsEntry cell={cell} cellInfo={cell.getContext().row.original as Request}/>
+                                        flexRender(cell.column.columnDef.cell, cell.getContext())
                                     )
                                     : flexRender(cell.column.columnDef.cell, cell.getContext())
                                     }

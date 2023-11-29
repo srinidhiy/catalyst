@@ -18,7 +18,7 @@ import { Input } from "@/components/ui/input"
 import { useState } from "react";
 import firebaseConfig from "@/firebase";
 import { initializeApp } from "firebase/app";
-import { doc, getFirestore, setDoc } from "firebase/firestore";
+import { doc, getDoc, getFirestore, setDoc, updateDoc } from "firebase/firestore";
 import { Item } from "@/constants/inventory_columns";
 import dayjs from "dayjs";
 
@@ -53,16 +53,25 @@ export function ItemForm({item}: ItemFormProps ) {
     async function onSubmit(data: z.infer<typeof ItemFormSchema>) {
         // add item to database
         console.log(data);
-        await setDoc(doc(db, "items", data.name), {
-            name: data.name,
-            vendor: data.vendor,
-            stock: data.stock,
-            location: data.location,
-            currStock: data.stock,
-            lastOrder: (dayjs().format("MM-DD-YYYY")).toString(),
-            requests: 0,
-            tag: "In Stock",
-        });
+        const docRef = doc(db, "items", data.name);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+            await updateDoc(docRef, {
+                stock: docSnap.data()?.currStock + data.stock,
+                currStock: docSnap.data()?.currStock + data.stock,
+            })
+        } else {
+            await setDoc(doc(db, "items", data.name), {
+                name: data.name,
+                vendor: data.vendor,
+                stock: data.stock,
+                location: data.location,
+                currStock: data.stock,
+                lastOrder: (dayjs().format("MM-DD-YYYY")).toString(),
+                requests: 0,
+                tag: "In Stock",
+            });
+        }
 
         setShowForm(false);
     }

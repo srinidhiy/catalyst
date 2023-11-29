@@ -51,7 +51,14 @@ export function DenyForm({ namesArray }: ApproveFormProps) {
             await updateDoc(requestRef, {
                 status: "Denied on " + data.status,
             })
+
+            const itemRef = doc(db, "items", name);
+            await updateDoc(itemRef, {
+                requests: increment(-1),
+            })
         });
+
+        
 
 
         setShowForm(false);

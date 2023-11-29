@@ -18,6 +18,14 @@ export type Item = {
     tagColor ?: string;
 }
 
+export type RequestData = {
+    name: string;
+    vendor: string;
+    stock: number;
+    link: string;
+    user: string
+}
+
 export const columns: ColumnDef<Item>[] = [
     // {
     //     id: "select",
@@ -100,7 +108,7 @@ export const columns: ColumnDef<Item>[] = [
         header: ({ column }) => {
             return (
                 <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-                    <h1 className="px-3">Tag</h1>
+                    <h1 className="px-3">Order In</h1>
                     <ArrowUpDown className="h-4 w-4" />    
                 </Button>
             )

@@ -73,6 +73,17 @@ export const columns: ColumnDef<Item>[] = [
         header: ({ column }) => {
             return (
                 <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+                    <h1 className="px-3">Requester</h1>
+                    <ArrowUpDown className="h-4 w-4" />    
+                </Button>
+            )
+        },
+        accessorKey: "user",
+    },
+    {
+        header: ({ column }) => {
+            return (
+                <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
                     <h1 className="px-3">Status</h1>
                     <ArrowUpDown className="h-4 w-4" />    
                 </Button>

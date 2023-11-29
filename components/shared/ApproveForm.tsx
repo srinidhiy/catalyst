@@ -54,6 +54,7 @@ export function ApproveForm({ namesArray }: ApproveFormProps) {
 
             const itemRef = doc(db, "items", name);
             await updateDoc(itemRef, {
+                requests: increment(-1),
                 lastOrder: data.status,
             })
 

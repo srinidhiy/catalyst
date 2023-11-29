@@ -18,7 +18,7 @@ import { Input } from "@/components/ui/input"
 import { useState } from "react";
 import firebaseConfig from "@/firebase";
 import { initializeApp } from "firebase/app";
-import { FieldValue, Firestore, doc, getDoc, getFirestore, increment, setDoc, updateDoc } from "firebase/firestore";
+import { FieldValue, Firestore, addDoc, collection, doc, getDoc, getFirestore, increment, setDoc, updateDoc } from "firebase/firestore";
 import { currentUser, useUser } from "@clerk/nextjs";
   
 
