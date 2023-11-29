@@ -13,8 +13,8 @@ export default function LeftNavbar() {
 
     const textStyles = "text-white text-lora ml-5";
     const activeTextStyles = "text-blue-650 text-lora ml-5";
-    const background = "py-4 px-14"
-    const activeBackground = "py-4 px-14 bg-blue-200"
+    const background = "py-4 px-20"
+    const activeBackground = "py-4 px-20 bg-blue-200"
 
     return (
         <>

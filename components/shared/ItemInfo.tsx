@@ -52,9 +52,9 @@ const framerSidebarBackground = {
 };
 
 const framerSidebarPanel = {
-  initial: { x: '-100%' },
+  initial: { x: '100%' },
   animate: { x: 0 },
-  exit: { x: '-100%' },
+  exit: { x: '100%' },
   transition: { duration: 0.3 },
 };
 
@@ -99,7 +99,7 @@ export default function Sidebar ({cell, cellInfo}: SidebarProps) {
             ></motion.div>
             <motion.div
               {...framerSidebarPanel}
-              className="fixed top-0 bottom-0 left-0 z-50 w-full h-screen max-w-xs border-r-2 border-[#cbd1d6] bg-[#f1f5f9]"
+              className="fixed top-0 bottom-0 right-0 z-50 w-full h-screen max-w-lg border-r-2 border-[#cbd1d6] bg-[#f1f5f9]"
               ref={ref}
               aria-label="Sidebar"
             >

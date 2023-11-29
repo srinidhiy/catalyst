@@ -24,12 +24,36 @@ import {
     TableRow,
 } from "@/components/ui/table"
 
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+  } from "@/components/ui/dialog"
+  import { Plus, Upload, PenSquare} from "lucide-react"
+  import { ItemForm } from "./ItemForm"
+  import { Item } from "@/constants/inventory_columns"
+
+
+
+
 import { Input } from "../ui/input"
 import { Button } from "../ui/button"
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
     data: TData[]
+}
+
+const emptyItem: Item = {
+    id: "",
+    name: "",
+    vendor: "",
+    stock: 0,
+    location: "",
 }
 
 export function RequestTable<TData, TValue>({columns, data}: DataTableProps<TData, TValue>) {
@@ -56,6 +80,10 @@ export function RequestTable<TData, TValue>({columns, data}: DataTableProps<TDat
     return (
         <div>
             <div className="flex items-center pb-4">
+            <div className="flex items-center gap-2">
+                    
+                    </div>
+
                 <Input
                 placeholder="Filter items..."
                 value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
