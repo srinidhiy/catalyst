@@ -1,7 +1,6 @@
 "use client"
 
-
-import { useState } from "react"
+import React, { createContext, useContext, useEffect, useState } from 'react';
 
 import {
     ColumnDef,
@@ -33,11 +32,9 @@ import {
     DialogTitle,
     DialogTrigger,
   } from "@/components/ui/dialog"
-  import { Plus, Upload, PenSquare} from "lucide-react"
   import { ItemForm } from "./ItemForm"
-  import { Item } from "@/constants/inventory_columns"
-
-
+  import { Item } from "@/constants/requestcolumns"
+  import { ApproveForm } from "./ApproveForm"
 
 
 import { Input } from "../ui/input"
@@ -48,18 +45,15 @@ interface DataTableProps<TData, TValue> {
     data: TData[]
 }
 
-const emptyItem: Item = {
-    id: "",
-    name: "",
-    vendor: "",
-    stock: 0,
-    location: "",
-}
-
 export function RequestTable<TData, TValue>({columns, data}: DataTableProps<TData, TValue>) {
     const [sorting, setSorting] = useState<SortingState>([]);
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
     const [rowSelection, setRowSelection] = useState({});
+
+
+    const [selectedNames, setSelectedNames] = useState<string[]>([]); // New state for storing names
+
+
     const table = useReactTable({ 
         data, 
         columns, 
@@ -77,10 +71,63 @@ export function RequestTable<TData, TValue>({columns, data}: DataTableProps<TDat
         },
     })
 
+
+   // Update the array of selected names when the selected rows change
+   let names: string[] = [];
+   table.getFilteredSelectedRowModel().rows.forEach((row) => {
+     row.getVisibleCells().forEach((cell) => {
+       if (cell.column.id === 'name') {
+         const renderedValue = flexRender(cell.column.columnDef.cell, cell.getContext());
+   
+         // Check if the result is a string before pushing it to the names array
+         if (typeof renderedValue === 'string') {
+           names.push(renderedValue);
+         }
+       }
+     });
+   });
+   
+
+
     return (
         <div>
             <div className="flex items-center pb-4">
             <div className="flex items-center gap-2">
+                    <Dialog>
+                        <DialogTrigger asChild className="bg-black">
+                            <Button className="bg-blue-650 hover:bg-blue-400 text-white px-6 py-4 rounded-xl " disabled={table.getFilteredSelectedRowModel().rows.length === 0}>
+                               Approve Item(s)
+                            </Button>
+                        </DialogTrigger>
+                        <DialogContent className="rounded-xl sm:max-w-[425px] bg-white ">
+                            <h1 className="text-lg font-bold">Items to be Approved:</h1>
+                            <ul>
+                {table.getFilteredSelectedRowModel().rows.map((row) => (
+                  <li key={row.id}>
+                    Name:{' '} 
+                    {row.getVisibleCells().map((cell) => (
+                      <span key={cell.id}>
+                        {cell.column.id === 'name' ? flexRender(cell.column.columnDef.cell, cell.getContext()): ''}
+                      </span>
+                    ))}{', '}
+                    Vendor:{' '}
+                    {row.getVisibleCells().map((cell) => (
+                      <span key={cell.id}>
+                        {cell.column.id === 'vendor' ? flexRender(cell.column.columnDef.cell, cell.getContext()): ''}
+                      </span>
+                    ))}{', '}
+                    Stock:{' '}
+                    {row.getVisibleCells().map((cell) => (
+                      <span key={cell.id}>
+                        {cell.column.id === 'stock' ? flexRender(cell.column.columnDef.cell, cell.getContext()): ''}
+                      </span>
+                    ))}
+                  </li>
+                ))}
+              </ul>
+                            <ApproveForm namesArray={names}/>
+                        </DialogContent>
+                    </Dialog>
                     
                     </div>
 
@@ -93,6 +140,8 @@ export function RequestTable<TData, TValue>({columns, data}: DataTableProps<TDat
                 className="max-w-sm border-slate-300 rounded-xl"
                 />
             </div>
+
+            
             <div className="rounded-xl border bg-slate-50">
             <Table>
                 <TableHeader>
@@ -162,8 +211,12 @@ export function RequestTable<TData, TValue>({columns, data}: DataTableProps<TDat
             </div>
             </div>
         </div>
-      )    
+      )  
+        
 }
+
+
+
 
 
   

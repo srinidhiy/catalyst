@@ -20,6 +20,7 @@ import {
     import CheckTable from '@/views/admin/default/components/CheckTable';
     import tableDataCheck from "@/views/admin/default/variables/tableDataCheck"
     import AppWrappers from '@/components/dashboard/AppWrappers';
+    import { Grid } from '@chakra-ui/react';
 
 
 
@@ -42,18 +43,15 @@ export default function DashboardMain() {
       
 
 
-      <SimpleGrid
-        columns={6}
-        gap="20px"
-        mb="20px">
 
-        <Box gridColumn="span 4">
-          <PieCard />
-        </Box>
-        <Box gridColumn="span 2">
-        <CheckTable tableData={tableDataCheck}/>
-        </Box>
-        </SimpleGrid>
+<SimpleGrid columns={6} gap="20px" mb="20px">
+  <Box gridColumn="span 4" h="100%">
+    <PieCard />
+  </Box>
+  <Box gridColumn="span 2" h="100%" overflow="auto">
+    <CheckTable tableData={tableDataCheck} />
+  </Box>
+</SimpleGrid>
 
   
       <SimpleGrid columns={{ base: 1, md: 2, xl: 2}} gap="20px" mb="20px">

@@ -8,9 +8,9 @@ import { Checkbox } from "@/components/ui/checkbox";
 export type Item = {
     id: string;
     name: string;
-    status: string;
-    stock ?: number;
     vendor ?: string;
+    stock ?: number;
+    status: string;
 }
 
 export const columns: ColumnDef<Item>[] = [

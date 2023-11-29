@@ -99,7 +99,7 @@ export default function CheckTable(props: { tableData: any }) {
 		debugTable: true
 	});
 	return (
-		<Card flexDirection='column' w='100%' h='100%' px='0px' overflowX={{ sm: 'scroll', lg: 'hidden' }}>
+		<Card flexDirection='column' w='100%' h='100%' px='0px' maxHeight='565px' overflowX={{ sm: 'scroll', lg: 'hidden' }}>
 			<Flex px='25px' mb="8px" justifyContent='space-between' align='center'>
 				<Text color={textColor} fontSize='22px' fontWeight='700' lineHeight='100%'>
 					Recommended Orders

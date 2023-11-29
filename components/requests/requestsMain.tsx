@@ -1,18 +1,7 @@
 "use client"
-
-import { Input } from "../ui/input"
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-  } from "@/components/ui/dialog"
   import { Button } from "../ui/button"
   import { RequestTable } from "@/components/shared/RequestTable"
-  import {Item, columns} from "../../constants/requestcolumns"
+  import {Item, columns} from "@/constants/requestcolumns"
   import { useEffect, useState } from "react"
 
 import { getDocs, getFirestore } from "firebase/firestore"
@@ -26,6 +15,7 @@ export default function RequestsMain() {
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
     const [requests, setItems] = useState<Item[]>([]);
+
 
     useEffect(() => {
         const getInventory = async() => {
@@ -42,7 +32,7 @@ export default function RequestsMain() {
         getInventory();
         
     }, [])
-    
+          
     
     return (
         <>
@@ -52,12 +42,16 @@ export default function RequestsMain() {
             </div>
 
             <div className="px-10 h-screen w-full py-5">
-                    <RequestTable columns={columns} data={requests} />
-                </div>
+                <RequestTable columns={columns} data={requests}/>
+            </div>
 
         
             
         </div>
+
+
+
+
         
         </>
     )

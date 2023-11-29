@@ -25,7 +25,7 @@ export default function Conversion(props: { [x: string]: any }) {
 	};
   
 	return (
-	  <Card p='20px' alignItems='center' flexDirection='column' w='100%' {...rest}>
+	  <Card p='20px' alignItems='center' flexDirection='column' w='100%' h='100%' minHeight='100%' {...rest}>
 		<Flex
 		  px={{ base: '0px', '2xl': '10px' }}
 		  justifyContent='space-between'
