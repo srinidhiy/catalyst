@@ -9,35 +9,38 @@ export type Item = {
     id: string;
     name: string;
     vendor: string;
-    stock ?: number;
-    requests ?: number;
+    stock: number;
+    currStock: number;
+    lastOrder: string;
+    requests: number;
     location ?: string;
     tag ?: string;
+    tagColor ?: string;
 }
 
 export const columns: ColumnDef<Item>[] = [
-    {
-        id: "select",
-        header: ({ table }) => (
-            <Checkbox
-            checked={
-                table.getIsAllPageRowsSelected() ||
-                (table.getIsSomePageRowsSelected() && "indeterminate")
-            }
-            onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-            aria-label="Select all"
-            />
-        ),
-        cell: ({ row }) => (
-            <Checkbox
-            checked={row.getIsSelected()}
-            onCheckedChange={(value) => row.toggleSelected(!!value)}
-            aria-label="Select row"
-            />
-        ),
-        // enableSorting: false,
-        // enableHiding: false,
-    },
+    // {
+    //     id: "select",
+    //     header: ({ table }) => (
+    //         <Checkbox
+    //         checked={
+    //             table.getIsAllPageRowsSelected() ||
+    //             (table.getIsSomePageRowsSelected() && "indeterminate")
+    //         }
+    //         onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+    //         aria-label="Select all"
+    //         />
+    //     ),
+    //     cell: ({ row }) => (
+    //         <Checkbox
+    //         checked={row.getIsSelected()}
+    //         onCheckedChange={(value) => row.toggleSelected(!!value)}
+    //         aria-label="Select row"
+    //         />
+    //     ),
+    //     // enableSorting: false,
+    //     // enableHiding: false,
+    // },
     {
         header: ({ column }) => {
             return (
@@ -69,7 +72,7 @@ export const columns: ColumnDef<Item>[] = [
                 </Button>
             )
         },
-        accessorKey: "stock",
+        accessorKey: "currStock",
     },
     {
         header: ({ column }) => {

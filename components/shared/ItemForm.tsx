@@ -20,14 +20,14 @@ import firebaseConfig from "@/firebase";
 import { initializeApp } from "firebase/app";
 import { doc, getFirestore, setDoc } from "firebase/firestore";
 import { Item } from "@/constants/inventory_columns";
-  
+import dayjs from "dayjs";
 
 const ItemFormSchema = z.object({
     name: z.string({
         required_error: "Please enter a name",
     }).min(1),
     vendor: z.string().min(1),
-    stock: z.string().min(1),
+    stock: z.coerce.number().min(0),
     location: z.string().min(1),
 });
 
@@ -45,7 +45,7 @@ export function ItemForm({item}: ItemFormProps ) {
         defaultValues: {
             name: item.name,
             vendor: item.vendor,
-            stock: item.stock?.toString(),
+            stock: item.stock,
             location: item.location,
         }
     });
@@ -56,8 +56,10 @@ export function ItemForm({item}: ItemFormProps ) {
         await setDoc(doc(db, "items", data.name), {
             name: data.name,
             vendor: data.vendor,
-            stock: parseInt(data.stock),
+            stock: data.stock,
             location: data.location,
+            currStock: data.stock,
+            lastOrder: (dayjs().format("MM-DD-YYYY")).toString(),
             requests: 0,
             tag: "In Stock",
         });

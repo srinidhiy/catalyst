@@ -18,7 +18,7 @@ const db = getFirestore(app);
 export default function Home() {
   const { getToken } = useAuth();
   const [items, setItems] = useState<Item[]>([]);
- 
+
   // useEffect(() => {
   //   const signInWithClerk = async () => {
   //     const auth = getAuth();
