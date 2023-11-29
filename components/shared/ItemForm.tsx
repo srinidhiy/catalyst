@@ -21,6 +21,8 @@ import { initializeApp } from "firebase/app";
 import { doc, getDoc, getFirestore, setDoc, updateDoc } from "firebase/firestore";
 import { Item } from "@/constants/inventory_columns";
 import dayjs from "dayjs";
+import { DialogClose } from "../ui/dialog";
+import { useRouter } from "next/navigation";
 
 const ItemFormSchema = z.object({
     name: z.string({
@@ -50,6 +52,7 @@ export function ItemForm({item}: ItemFormProps ) {
         }
     });
 
+    const router = useRouter();
     async function onSubmit(data: z.infer<typeof ItemFormSchema>) {
         // add item to database
         console.log(data);
@@ -136,13 +139,27 @@ export function ItemForm({item}: ItemFormProps ) {
                 </FormItem>
             )}
             />
-            <Button className=" bg-slate-300 rounded-xl hover:bg-slate-400" type="submit">Submit</Button>
+            <div className="flex gap-3">
+                <Button className="bg-blue-650 hover:bg-blue-400 text-white px-6 py-4 rounded-xl" type="submit">Submit</Button>
+                <DialogClose>
+                    <Button onClick={window.location.reload.bind(window.location)} className="bg-slate-300 rounded-xl hover:bg-slate-400 ">
+                        Close
+                    </Button>
+                </DialogClose>
+            </div>
         </form>
         </Form>
         ) : (
             <div className="flex flex-col items-center justify-center w-full">
                 <h1 className="text-lg font-bold">Item added!</h1>
-                <Button onClick={onAdded}>Add another item.</Button>
+                <div className="flex flex-col gap-3">
+                    <Button onClick={onAdded}>Add another item.</Button>
+                    <DialogClose>
+                        <Button onClick={window.location.reload.bind(window.location)} className="bg-blue-650 hover:bg-blue-400 text-white px-6 py-4 rounded-xl ">
+                            Close
+                        </Button>
+                    </DialogClose>
+                </div>
             </div>
         )
     )

@@ -28,7 +28,7 @@ import { Button } from '@chakra-ui/react';
 import { X } from 'lucide-react';
 import firebaseConfig from '@/firebase';
 import { initializeApp } from 'firebase/app';
-import { getFirestore, getDocs, collection, doc, getDoc, updateDoc, increment } from 'firebase/firestore';
+import { getFirestore, getDocs, collection, doc, getDoc, updateDoc, increment, onSnapshot } from 'firebase/firestore';
 import { ScrollArea } from '../ui/scroll-area';
 import { PenSquare } from 'lucide-react';
 import { Dialog, DialogContent, DialogTrigger } from '../ui/dialog';
@@ -85,6 +85,7 @@ export default function ItemInfo ({cell, cellInfo}: SidebarProps) {
   console.log(cellInfo.name);
   const [open, setOpen] = useState(false);
   const [orders, setOrders] = useState<Order[]>([]); // [date, date, date
+  const [stock, setStock] = useState<number>(); // [date, date, date
   const ref = useRef(null);
   // useClickAway(ref, () => setOpen(false));
   const toggleSidebar = () => setOpen((prev) => !prev);
@@ -101,6 +102,14 @@ export default function ItemInfo ({cell, cellInfo}: SidebarProps) {
       setOrders(order_array);
     }
     getOrders();
+
+    const getStock = async() => {
+      const unsub = onSnapshot(doc(db, "items", cellInfo.name), (doc) => {
+        setStock(doc.data()?.currStock);
+      }
+    )};
+    getStock();
+
   }, [])
 
   async function onIncrease() {
@@ -201,7 +210,7 @@ export default function ItemInfo ({cell, cellInfo}: SidebarProps) {
               <div className='flex flex-col p-5 gap-4 '>
                 <div className='flex flex-col items-center'>
                   <p className=' font-semibold text-lg'>Current stock: </p>
-                  <p className='text-lg mt-1'>{cellInfo.currStock} Units</p>
+                  <p className='text-lg mt-1'>{stock} Units</p>
                 </div>
                 <div className='flex flex-row justify-center gap-3'>
                   <Button onClick={onDecrease} className='p-3 bg-blue-650 rounded-xl hover:bg-blue-300 text-white font-semibold'>Decrease</Button>

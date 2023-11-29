@@ -19,6 +19,7 @@ import { useState } from "react";
 import firebaseConfig from "@/firebase";
 import { initializeApp } from "firebase/app";
 import { FieldValue, Firestore, doc, getFirestore, increment, setDoc, updateDoc } from "firebase/firestore";
+import { DialogClose } from "../ui/dialog";
 
 interface ApproveFormProps {
     namesArray: string[]; // Array of document names
@@ -95,6 +96,11 @@ export function DenyForm({ namesArray }: ApproveFormProps) {
         ) : (
             <div className="flex flex-col items-center justify-center w-full">
                 <h1 className="text-lg font-bold">Item(s) denied.</h1>
+                <DialogClose>
+                    <Button onClick={window.location.reload.bind(window.location)} className="bg-blue-650 hover:bg-blue-400 text-white px-6 py-4 rounded-xl ">
+                        Close
+                    </Button>
+                </DialogClose>
             </div>
         )
     )

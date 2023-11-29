@@ -20,6 +20,7 @@ import firebaseConfig from "@/firebase";
 import { initializeApp } from "firebase/app";
 import { FieldValue, Firestore, addDoc, collection, doc, getDoc, getFirestore, increment, setDoc, updateDoc } from "firebase/firestore";
 import { currentUser, useUser } from "@clerk/nextjs";
+import { DialogClose } from "../ui/dialog";
   
 
 const ItemFormSchema = z.object({
@@ -135,13 +136,27 @@ export function RequestItemForm({name, vendor}: RequestItemFormProps) {
                 </FormItem>
             )}
             />
-            <Button className="bg-slate-300 rounded-xl hover:bg-slate-400" type="submit">Submit</Button>
+            <div className="flex gap-3">
+                <Button className="bg-blue-650 hover:bg-blue-400 text-white px-6 py-4 rounded-xl" type="submit">Submit</Button>
+                <DialogClose>
+                    <Button onClick={window.location.reload.bind(window.location)} className="bg-slate-300 rounded-xl hover:bg-slate-400 ">
+                        Close
+                    </Button>
+                </DialogClose>
+            </div>
         </form>
         </Form>
         ) : (
             <div className="flex flex-col items-center justify-center w-full">
                 <h1 className="text-lg font-bold">Item requested!</h1>
-                <Button onClick={onAdded}>Request another item.</Button>
+                <div className="flex gap-3">
+                    <Button onClick={onAdded}>Add another item.</Button>
+                    <DialogClose>
+                        <Button onClick={window.location.reload.bind(window.location)} className="bg-slate-300 rounded-xl hover:bg-slate-400xl ">
+                            Close
+                        </Button>
+                    </DialogClose>
+                </div>
             </div>
         )
     )
