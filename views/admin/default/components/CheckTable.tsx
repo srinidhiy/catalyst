@@ -104,7 +104,7 @@ export default function CheckTable(props: { tableData: any }) {
 				<Text color={textColor} fontSize='22px' fontWeight='700' lineHeight='100%'>
 					Recommended Orders
 				</Text>
-				<Menu />
+				
 			</Flex>
 			<Box>
 				<Table variant='simple' color='gray.500' mb='24px' mt="12px">
