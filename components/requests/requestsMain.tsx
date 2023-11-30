@@ -11,6 +11,7 @@ import firebaseConfig from "@/firebase"
 import { initializeApp } from "firebase/app"
 import { ArchivedRequestTable } from "../shared/ArchivedRequestTable"
 import { ScrollArea } from "@radix-ui/react-scroll-area"
+import AppWrappers from '@/components/dashboard/AppWrappers';
 
 
 export default function RequestsMain() {
@@ -58,8 +59,8 @@ export default function RequestsMain() {
                 <h1 className="text-blue-650 font-medium text-3xl ml-3 mt-1">REQUESTS</h1>
             </div>
             
-            
-            <div className="px-10 flex flex-col w-full py-5 gap-2">
+
+            <div className="max-h-screen overflow-y-auto px-10 flex flex-col w-full py-5 gap-2">
                 <RequestTable columns={columns} data={requests}/>
                 <ArchivedRequestTable columns={archiveColumns} data={archivedRequests}/>
             </div>

@@ -4,27 +4,78 @@ import Image from "next/image"
 import Link from "next/link"
 import { usePathname, useRouter } from  "next/navigation" 
 import { Input } from "../ui/input"
-import { useEffect, useState } from "react"
 import {
     Box,
     SimpleGrid,
     Flex,
     useColorModeValue,
   } from '@chakra-ui/react';
-    import ComplexTable from '@/views/admin/default/components/ComplexTable';
+    import {ComplexTable} from '@/views/admin/default/components/ComplexTable';
     import PieCard from '@/views/admin/default/components/PieCard';
     import Tasks from '@/views/admin/default/components/Tasks';
     import TotalSpent from '@/views/admin/default/components/TotalSpent';
-    import tableDataComplex from '@/views/admin/default/variables/tableDataComplex';
     import MiniCalendar from '@/views/admin/default/components/MiniCalendar';
     import CheckTable from '@/views/admin/default/components/CheckTable';
     import tableDataCheck from "@/views/admin/default/variables/tableDataCheck"
     import AppWrappers from '@/components/dashboard/AppWrappers';
     import { Grid } from '@chakra-ui/react';
+  import { Button } from "../ui/button"
+  import { RequestTable } from "@/components/shared/RequestTable"
+  import { archiveColumns } from "@/constants/archivedrequestcolumns"
+  import { useEffect, useState } from "react"
+
+import { getDocs, getFirestore, query, where } from "firebase/firestore"
+import { collection } from "firebase/firestore"
+import firebaseConfig from "@/firebase"
+import { initializeApp } from "firebase/app"
+import { ArchivedRequestTable } from "../shared/ArchivedRequestTable"
+import {Item} from "@/constants/noselectcolumn"
+import {columns} from "@/constants/noselectcolumn"
 
 
 
 export default function DashboardMain() {
+
+
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  const [requests, setItems] = useState<Item[]>([]);
+  const [archivedRequests, setArchivedRequests] = useState<Item[]>([]);
+
+
+  useEffect(() => {
+      const getInventory = async() => {
+          const items: Item[] = [];
+          // console.log("Getting items");
+          const requestQuery = query(collection(db, "requests"), where("status", "==", "Pending Approval"));
+          const querySnapshot = await getDocs(requestQuery);
+          querySnapshot.forEach((doc) => {
+              // console.log(doc.id, " => ", doc.data());
+  
+              items.push(doc.data() as Item);
+          });
+          setItems(items);
+      }
+      getInventory();
+
+      const getArchivedRequests = async() => {
+          const requests: Item[] = [];
+          const requestQuery = query(collection(db, "requests"), where("status", "!=", "Pending Approval"));
+          const querySnapshot = await getDocs(requestQuery);
+          querySnapshot.forEach((doc) => {
+              // console.log(doc.id, " => ", doc.data());
+  
+              requests.push(doc.data() as Item);
+          });
+          setArchivedRequests(requests);
+      }
+      getArchivedRequests();
+      
+  }, [])
+
+
+
     return (
         <>
         <div className="ml-[-10px] rounded-l-xl flex flex-col items-start w-full h-screen bg-slate-100">
@@ -55,7 +106,8 @@ export default function DashboardMain() {
 
   
       <SimpleGrid columns={{ base: 1, md: 2, xl: 2}} gap="20px" mb="20px">
-        <ComplexTable tableData={tableDataComplex} />
+      <ComplexTable columns={columns} data={requests}/>
+
         <TotalSpent />
       </SimpleGrid>
 

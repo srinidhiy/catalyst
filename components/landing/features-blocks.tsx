@@ -112,7 +112,7 @@ export default function FeaturesBlocks() {
                   </g>
                 </g>
               </svg>
-              <h4 className="text-xl font-bold leading-snug tracking-tight mb-1">One Time Payment</h4>
+              <h4 className="text-xl font-bold leading-snug tracking-tight mb-1">Annual Payment</h4>
               <p className="text-gray-600 text-center">Users can enjoy Catalyst's services indefinitely without any recurring charges.</p>
             </div>
 
